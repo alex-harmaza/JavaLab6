@@ -1,0 +1,6 @@
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+/.idea
+Lab6.iml
