@@ -3,4 +3,7 @@
 # IntelliJ
 /out/
 /.idea
-Lab6.iml
+*.iml
+
+# User files
+*.txt
