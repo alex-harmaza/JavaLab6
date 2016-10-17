@@ -11,10 +11,10 @@ public class Runner {
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         try {
-            System.out.print("Enter the order matrices: ");
+            System.out.print("Enter the order matrices (min - 2): ");
             int order = Integer.parseInt(console.nextLine().trim());
 
-            if (order < 0){
+            if (order <= 1){
                 throw new NumberFormatException();
             }
 
@@ -29,7 +29,7 @@ public class Runner {
             }
         }
         catch (NumberFormatException ex){
-            System.out.println("Error: incorrect input value");
+            System.out.println("Error: incorrect value");
         } catch (InterruptedException | ExecutionException ex) {
             ex.printStackTrace();
         }

@@ -1,8 +1,6 @@
 package by.training.epam.lab6.task1;
 
 
-import java.util.Arrays;
-
 /**
  * Created by alexh on 10.10.2016.
  */
@@ -12,7 +10,7 @@ public class SquareMatrix {
 
 
     public SquareMatrix(int size){
-        if (size < 0){
+        if (size < 2){
             throw new IllegalArgumentException("The size can't be negative");
         }
         matrix = new double[size][size];
