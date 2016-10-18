@@ -18,11 +18,15 @@ public class EnglishGroup {
 
 
     public void enroll(Human human) throws InterruptedException{
-        System.out.printf("%s recorded in the group.\n", human.getHumanName());
-        Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 4000 + 1));
-        System.out.printf("%s joined the group. It remains to %d seats.\n",
-                human.getHumanName(), latch.getCount() - 1);
-        latch.countDown();
+        try {
+            System.out.printf("%s recorded in the group.\n", human.getHumanName());
+            Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 4000 + 1));
+            System.out.printf("%s joined the group. It remains to %d seats.\n",
+                    human.getHumanName(), latch.getCount() - 1);
+        }
+        finally {
+            latch.countDown();
+        }
     }
 
 

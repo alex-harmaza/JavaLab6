@@ -35,7 +35,7 @@ public class Car  extends Thread{
             Thread.sleep(trackLength / carSpeed);
             System.out.printf("The car №%d finished!\n", carNumber);
         } catch (InterruptedException e) {
-
+            Thread.currentThread().interrupt();
         }
     }
 }

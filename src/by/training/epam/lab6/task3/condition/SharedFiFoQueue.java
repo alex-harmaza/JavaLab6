@@ -23,7 +23,7 @@ public class SharedFiFoQueue<T> {
         //Потоки получают блокировку в том порядке,
         //в каком они ее запрашивали (флаг true)
         lock = new ReentrantLock(true);
-        
+
         isNotEmpty = lock.newCondition();
         isNotFull = lock.newCondition();
     }
