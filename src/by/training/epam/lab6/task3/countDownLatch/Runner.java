@@ -7,8 +7,6 @@ package by.training.epam.lab6.task3.countDownLatch;
  * Группа постепенно заполняется людьми и когда наберется необходимое
  * количество людей - начнутся курсы по языку
  */
-
-
 public class Runner {
 
     public static void main(String[] args) throws InterruptedException {

@@ -10,32 +10,32 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class ThreadSafeArrayList<E> {
 
-    private final ReadWriteLock readWriteLock;
+    private final ReadWriteLock lock;
     private final List<E> list = new ArrayList<E>();
 
 
     public ThreadSafeArrayList(){
-        readWriteLock = new ReentrantReadWriteLock();
+        lock = new ReentrantReadWriteLock();
     }
 
 
     public void add(E o) {
-        readWriteLock.writeLock().lock();
+        lock.writeLock().lock();
         try {
             list.add(o);
         }
         finally {
-            readWriteLock.writeLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
     public E get(int i) {
         try {
-            readWriteLock.readLock().lock();
+            lock.readLock().lock();
             return list.get(i);
         }
         finally {
-            readWriteLock.readLock().unlock();
+            lock.readLock().unlock();
         }
     }
 }

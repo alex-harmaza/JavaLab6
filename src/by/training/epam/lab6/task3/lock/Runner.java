@@ -7,7 +7,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by Aliaksandr_Harmaza on 10/14/2016.
+ * Потокобезопасная запись в файл
  */
 public class Runner {
 
@@ -21,6 +21,9 @@ public class Runner {
 
                 @Override
                 public void run() {
+                    //Вызывая метод lock() текущий поток, если объект класса Lock был захвачен,
+                    //будет выжидать, пока другой поток,
+                    //захвативший Lock объект, не вызовет метод unlock
                     locker.lock();
                     try {
                         System.out.printf("Thread №%d writes to a file\n", this.getId());

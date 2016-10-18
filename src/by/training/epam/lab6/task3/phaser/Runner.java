@@ -3,12 +3,19 @@ package by.training.epam.lab6.task3.phaser;
 import java.util.concurrent.Phaser;
 
 /**
- * Created by Aliaksandr_Harmaza on 10/14/2016.
+ * Гонки автомобилей.
+ * Сначала все автомобили подъежают к стартовой линии
+ * ожидают друг друга, пока все не соберутся.
+ * Когда все соберутся, то производится отсчет
+ * и все машины стартуют.
  */
 public class Runner {
 
     public static void main(String[] args) throws InterruptedException {
         Car[] cars = new Car[10];
+
+        //Создаем объекта класса Phaser на количество фаз
+        //равное количеству авто + 3 фазы (На старт, внимание, марш)
         Phaser phaser = new Phaser(cars.length + 3);
 
         for (int i = 0; i < cars.length; i++) {
@@ -17,20 +24,21 @@ public class Runner {
             Thread.sleep(100);
         }
 
+        //Ждем, пока все машины не доедут до стартовой линии
         while (phaser.getRegisteredParties() > 3) {
             Thread.sleep(100);
         }
 
-        Thread.sleep(100);
-        System.out.println("На старт!");
+        Thread.sleep(200);
+        System.out.println("At the start!");
         phaser.arriveAndDeregister();
 
-        Thread.sleep(100);
-        System.out.println("Внимание!");
+        Thread.sleep(200);
+        System.out.println("Attention!");
         phaser.arriveAndDeregister();
 
-        Thread.sleep(100);
-        System.out.println("Марш!");
+        Thread.sleep(200);
+        System.out.println("Go!");
         phaser.arriveAndDeregister();
 
         for (Car car : cars){

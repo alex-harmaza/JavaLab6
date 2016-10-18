@@ -23,13 +23,19 @@ public class Car  extends Thread{
     @Override
     public void run() {
         try {
-            System.out.printf("Автомобиль №%d подъехал к стартовой прямой.\n", carNumber);
+            System.out.printf("The car №%d pulled up to the starting line.\n", carNumber);
+
+            //Сообщаем о завершении фазы
+            //(т.е. объявляем, что машина доехала до стартовой линии)
             phaser.arriveAndDeregister();
+
+            //Ожидаем пока фаза не станет равной нулю (т.е. было объявлено "Марш")
             phaser.awaitAdvance(0);
+
             Thread.sleep(trackLength / carSpeed);
-            System.out.printf("Автомобиль №%d финишировал!\n", carNumber);
+            System.out.printf("The car №%d finished!\n", carNumber);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+
         }
     }
 }

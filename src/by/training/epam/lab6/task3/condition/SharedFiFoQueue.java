@@ -4,9 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Created by Aliaksandr_Harmaza on 10/17/2016.
- */
+
 public class SharedFiFoQueue<T> {
 
     private Object[] queue;
@@ -14,45 +12,65 @@ public class SharedFiFoQueue<T> {
     private int placeIndex;
     private int removeIndex;
 
-    private final Lock lock = new ReentrantLock();
-    private final Condition isEmpty = lock.newCondition();
-    private final Condition isFull = lock.newCondition();
+    private final Lock lock;
+    private final Condition isNotEmpty;
+    private final Condition isNotFull;
 
 
     public SharedFiFoQueue(int capacity) {
         this.queue = new Object[capacity];
+
+        //Потоки получают блокировку в том порядке,
+        //в каком они ее запрашивали (флаг true)
+        lock = new ReentrantLock(true);
+        
+        isNotEmpty = lock.newCondition();
+        isNotFull = lock.newCondition();
     }
 
 
     public void add(T element) throws InterruptedException {
         lock.lock();
+        try {
+            //Ожидаем, пока не появится место в очереди
+            while(current >= queue.length){
+                isNotFull.await();
+            }
 
-        while(current >= queue.length){
-            isFull.await();
+            queue[placeIndex] = element;
+            placeIndex = (placeIndex + 1) % queue.length;
+            ++current;
+
+            //Сообщаем ожидающим потокам, которые хотят удалить элемент,
+            //что очередь не пустая
+            isNotEmpty.signal();
         }
-
-        queue[placeIndex] = element;
-        placeIndex = (placeIndex + 1) % queue.length;
-        ++current;
-        isEmpty.signal();
-        lock.unlock();
+        finally {
+            lock.unlock();
+        }
     }
 
     public T remove() throws InterruptedException {
         T element;
-
         lock.lock();
+        try {
 
-        while(current <= 0){
-            isEmpty.await();
+            //Ожидаем пока в очереди не появится элемент
+            while(current <= 0){
+                isNotEmpty.await();
+            }
+
+            element = (T) queue[removeIndex];
+            removeIndex = (removeIndex + 1) % queue.length;
+            --current;
+
+            //Сообщаем ожидающим потокам, которые хотят добавить элемент,
+            //что в очереди освободилось место
+            isNotFull.signal();
         }
-
-        element = (T) queue[removeIndex];
-        removeIndex = (removeIndex + 1) % queue.length;
-        --current;
-
-        isFull.signal();
-        lock.unlock();
+        finally {
+            lock.unlock();
+        }
         return element;
     }
 

@@ -4,7 +4,7 @@ import java.util.concurrent.Exchanger;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by Aliaksandr_Harmaza on 10/14/2016.
+ * Ольга и Александр приветствуют друг друга
  */
 public class Runner {
 
@@ -45,6 +45,8 @@ public class Runner {
         @Override
         public void run() {
             try {
+                //Через exсhange метод отправляется имя потока другому потоку
+                //Текущий поток блокируется пока не получит в ответ имя другого потока (человека)
                 System.out.printf("%s: hi, %s!\n", this.name, exchanger.exchange(this.name));
                 Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 6000 + 1));
                 System.out.printf("%s: goodbye, %s!\n", this.name, exchanger.exchange(this.name));
